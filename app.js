@@ -45,8 +45,14 @@ function renderCart(){
 document.addEventListener("click",e=>{
  let v=e.target.closest("[data-view]");if(v)show(v.dataset.view);
  let a=e.target.closest("[data-add]");if(a){let p=products.find(x=>x.id===Number(a.dataset.add));let item=cart.find(x=>x.id===p.id);item?item.qty++:cart.push({...p,qty:1});save();a.textContent="Added ✓";setTimeout(()=>a.textContent="Add to cart",900)}
- let c=e.target.closest("[data-category]");if(c){show("shop");renderProducts(products.filter(p=>p.category===c.dataset.category))}
-});
+ let c=e.target.closest("[data-category]");
+if(c){
+  openCategory(c.dataset.category);
+}
+let back=e.target.closest("[data-all-categories]");
+if(back){
+  closeCategory();
+}
 document.querySelector("#search").addEventListener("input",e=>renderProducts(products.filter(p=>(p.name+" "+p.category+" "+p.seller).toLowerCase().includes(e.target.value.toLowerCase()))));
 document.querySelector("#shop-now").onclick=()=>document.querySelector("#products").scrollIntoView({behavior:"smooth"});
 function preview(){let n=Number(document.querySelector("#product-price").value)||0;document.querySelector("#price-preview").innerHTML=`Customer price: ${money(n*1.2)} <small>Seller price ${money(n)} + Together markup ${money(n*.2)}</small>`}
