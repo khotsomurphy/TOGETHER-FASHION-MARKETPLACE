@@ -36,6 +36,62 @@ function renderProducts(list=products){
 }
 function save(){localStorage.setItem("together-cart",JSON.stringify(cart));document.querySelector("#cart-count").textContent=cart.reduce((n,x)=>n+x.qty,0)}
 function show(view){document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));document.querySelector(`#${view}-view`).classList.remove("hidden");if(view==="cart")renderCart();window.scrollTo({top:0,behavior:"smooth"})}
+
+function openCategory(category){
+  const shop=document.querySelector("#shop-view");
+
+  shop.classList.add("category-mode");
+  shop.querySelector(".hero").classList.add("hidden");
+
+  const sections=shop.querySelectorAll(".section");
+  sections[0].classList.add("hidden");
+  shop.querySelector(".ad-slot").classList.add("hidden");
+
+  const productsSection=document.querySelector("#products").closest(".section");
+
+  let heading=document.querySelector("#category-heading");
+
+  if(!heading){
+    heading=document.createElement("div");
+    heading.id="category-heading";
+    heading.className="category-heading";
+    productsSection.insertBefore(
+      heading,
+      document.querySelector("#products")
+    );
+  }
+
+  heading.innerHTML=`
+    <button data-all-categories class="back-categories">
+      ← All categories
+    </button>
+    <p class="eyebrow">SHOPPING DEPARTMENT</p>
+    <h2>${escapeHtml(category)}</h2>
+    <p>Explore products from Together sellers.</p>
+  `;
+
+  renderProducts(
+    products.filter(p =>
+      p.category.toLowerCase()===category.toLowerCase()
+    )
+  );
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function closeCategory(){
+  const shop=document.querySelector("#shop-view");
+
+  shop.classList.remove("category-mode");
+  shop.querySelector(".hero").classList.remove("hidden");
+  shop.querySelectorAll(".section")[0].classList.remove("hidden");
+  shop.querySelector(".ad-slot").classList.remove("hidden");
+
+  document.querySelector("#category-heading")?.remove();
+
+  renderProducts(products);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 function renderCart(){
  let el=document.querySelector("#cart-items");
  if(!cart.length){el.innerHTML="<p>Your cart is empty. Explore the marketplace to find something you love.</p>";return}
