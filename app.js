@@ -13,7 +13,6 @@ let cart = JSON.parse(localStorage.getItem("together-cart")||"[]");
 const money = n => "R"+Number(n).toFixed(2);
 const finalPrice = p => Number((p.original*1.2).toFixed(2));
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-
 function renderProducts(list=products){
   document.querySelector("#products").innerHTML =
     list.map(p => `
