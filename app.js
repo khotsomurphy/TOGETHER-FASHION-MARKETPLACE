@@ -14,7 +14,7 @@ const money = n => "R"+Number(n).toFixed(2);
 const finalPrice = p => Number((p.original*1.2).toFixed(2));
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function renderProducts(list=products){
- document.querySelector("#products").innerHTML=list.map(p=>`<article class="product"><div class="product-art">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`:`<span>${escapeHtml(p.emoji||"👚")}</span>`}</div><div class="product-info"><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.category)} · ${escapeHtml(p.seller||"Together seller")}</p><div class="price">${money(finalPrice(p))}</div><button data-add="${p.id}">Add to cart</button></div></article>`).join("");
+ document.querySelector("#products").innerHTML=list.map(p=>`<article class="product"><div class="product-art">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`:``<div class="photo-placeholder">Photo coming soon</div>``}</div><div class="product-info"><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.category)} · ${escapeHtml(p.seller||"Together seller")}</p><div class="price">${money(finalPrice(p))}</div><button data-add="${p.id}">Add to cart</button></div></article>`).join("");
 }
 function save(){localStorage.setItem("together-cart",JSON.stringify(cart));document.querySelector("#cart-count").textContent=cart.reduce((n,x)=>n+x.qty,0)}
 function show(view){document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));document.querySelector(`#${view}-view`).classList.remove("hidden");if(view==="cart")renderCart();window.scrollTo({top:0,behavior:"smooth"})}
