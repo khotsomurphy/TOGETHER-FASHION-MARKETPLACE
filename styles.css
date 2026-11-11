@@ -16,3 +16,12 @@ nav{display:flex;gap:10px;margin-left:auto}button,a{cursor:pointer}nav button,.c
 .cart-thumb{width:46px;height:46px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:8px}footer{background:#20105e;color:white;padding:28px clamp(18px,5vw,70px);display:flex;align-items:center;gap:20px;flex-wrap:wrap}footer .brand{color:white}footer p{margin-right:auto}footer small{color:#cfc5ef}
 @media(max-width:800px){.topbar{flex-wrap:wrap;gap:10px}.search{order:3;max-width:none;flex-basis:100%}nav{gap:0}.products{grid-template-columns:repeat(2,1fr)}.seller-grid{grid-template-columns:1fr}.hero-art{font-size:85px;margin-right:0}.hero-art span{top:75px;font-size:10px}.ad-slot{align-items:flex-start;flex-wrap:wrap}.categories{gap:8px}.category{padding:15px 5px}}
 @media(max-width:430px){.view{padding:20px 14px}.hero{padding:28px 22px;min-height:280px}.hero-art{display:none}.categories{grid-template-columns:repeat(3,1fr)}nav button{padding:8px;font-size:13px}.section-head{align-items:flex-start;gap:10px;flex-direction:column}}
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: #f3eff9;
+  color: #666;
+  font-size: 14px;
+}
