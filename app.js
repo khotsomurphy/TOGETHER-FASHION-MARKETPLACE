@@ -26,7 +26,11 @@ function renderProducts(list=products){
           }
         </div>
         <div class="product-info">
-          <h3>${escapeHtml(p.name)}</h3>
+          <h3>
+  <button type="button" data-open-product="${p.id}">
+    ${escapeHtml(p.name)}
+  </button>
+</h3>
           <p>${escapeHtml(p.category)} · ${escapeHtml(p.seller || "Together seller")}</p>
           <div class="price">${money(finalPrice(p))}</div>
           <button data-add="${p.id}">Add to cart</button>
