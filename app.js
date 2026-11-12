@@ -96,6 +96,30 @@ function closeCategory(){
   renderProducts(products);
   window.scrollTo({top:0,behavior:"smooth"});
 }
+function openProduct(id){
+ const product=products.find(p=>String(p.id)===String(id));
+ if(!product)return;
+
+ document.querySelector("#detail-name").textContent=product.name;
+ document.querySelector("#detail-category").textContent=product.category;
+ document.querySelector("#detail-price").textContent=money(finalPrice(product));
+ document.querySelector("#detail-seller").textContent="Sold by "+(product.seller||"Together seller");
+
+ const img=document.querySelector("#detail-image");
+ if(product.image){
+  img.src=product.image;
+  img.alt=product.name;
+  img.hidden=false;
+ }else{
+  img.removeAttribute("src");
+  img.alt="No product photograph available";
+  img.hidden=true;
+ }
+
+ document.querySelector("#detail-add").dataset.add=product.id;
+ document.querySelector("#detail-add").textContent="Add to cart";
+ show("product");
+}
 function renderCart(){
  let el=document.querySelector("#cart-items");
  if(!cart.length){el.innerHTML="<p>Your cart is empty. Explore the marketplace to find something you love.</p>";return}
