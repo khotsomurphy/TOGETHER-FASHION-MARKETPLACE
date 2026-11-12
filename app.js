@@ -128,6 +128,16 @@ function renderCart(){
 }
 document.addEventListener("click",e=>{
  let v=e.target.closest("[data-view]");if(v)show(v.dataset.view);
+ let productLink=e.target.closest("[data-open-product]");
+if(productLink){
+  openProduct(productLink.dataset.openProduct);
+}
+
+let backToShop=e.target.closest("[data-back-to-shop]");
+if(backToShop){
+  show("shop");
+}
+
  let a=e.target.closest("[data-add]");if(a){let p=products.find(x=>x.id===Number(a.dataset.add));let item=cart.find(x=>x.id===p.id);item?item.qty++:cart.push({...p,qty:1});save();a.textContent="Added ✓";setTimeout(()=>a.textContent="Add to cart",900)}
  let c=e.target.closest("[data-category]");
 if(c){
