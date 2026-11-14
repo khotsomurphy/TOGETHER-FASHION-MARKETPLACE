@@ -11,8 +11,9 @@ window.TOGETHER_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Mkhh28_Uwe4859Ohgcvt5
   }
 
   const client = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
+window.TOGETHER_SUPABASE_URL,
+window.TOGETHER_SUPABASE_PUBLISHABLE_KEY
+    
   );
 
   window.togetherSupabase = client;
