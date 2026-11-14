@@ -113,5 +113,20 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="app.js"></script>
+<div id="supabase-test" style="padding:10px;background:#eee;color:#000;">
+  Checking Supabase connection...
+</div>
+
+<script>
+window.addEventListener("load", function () {
+  const test = document.getElementById("supabase-test");
+
+  if (window.togetherSupabase) {
+    test.textContent = "Supabase client initialized successfully!";
+  } else {
+    test.textContent = "Supabase connection not initialized.";
+  }
+});
+</script>
 </body>
   </html>
