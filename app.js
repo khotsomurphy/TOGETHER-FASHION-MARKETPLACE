@@ -255,4 +255,60 @@ options: {
       message.textContent = error.message;
     }
   });
+// Together Marketplace Seller Login
+
+document.querySelector("#seller-login-form")
+  ?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const message = document.querySelector("#seller-auth-message");
+    const client = window.togetherSupabase;
+
+    const email = document
+      .querySelector("#seller-login-email").value.trim();
+
+    const password = document
+      .querySelector("#seller-login-password").value;
+
+    message.textContent = "Signing in...";
+
+    try {
+      const { data, error } =
+        await client.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if (error) throw error;
+
+      const { data: profile, error: profileError } =
+        await client
+          .from("seller_profiles")
+          .select("*")
+          .eq("id", data.user.id)
+          .single();
+
+      if (profileError) throw profileError;
+
+      message.textContent =
+        "Welcome back, " + profile.full_name + "!";
+
+    } catch (error) {
+      message.textContent = error.message;
+    }
+  });
+
+// Switch between registration and login
+
+document.querySelector("#show-login-form")
+  ?.addEventListener("click", () => {
+    document.querySelector("#seller-register-form").style.display = "none";
+    document.querySelector("#seller-login-form").style.display = "block";
+  });
+
+document.querySelector("#show-register-form")
+  ?.addEventListener("click", () => {
+    document.querySelector("#seller-login-form").style.display = "none";
+    document.querySelector("#seller-register-form").style.display = "block";
+  });
 
