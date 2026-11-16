@@ -223,13 +223,16 @@ document.querySelector("#seller-register-form")
       const { data, error } = await client.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            full_name: fullName,
-            store_name: storeName
-          }
-        }
-      });
+        
+options: {
+  emailRedirectTo:
+    "https://khotsomurphy.github.io/TOGETHER-FASHION-MARKETPLACE/",
+  data: {
+    full_name: fullName,
+    store_name: storeName
+  }
+}
+});
 
       if (error) throw error;
 
