@@ -67,6 +67,14 @@
 <label>Category<select id="product-category"><option>Women</option><option>Men</option><option>Kids</option><option>Shoes</option><option>Accessories</option></select></label>
 <label>Your original price (R)<input id="product-price" type="number" min="1" step=".01" required placeholder="250.00"></label>
 <label>Product photo URL<input id="product-image" type="url" placeholder="Paste a publicly accessible image URL"><small class="fine">Use a publicly accessible image URL.</small></label>
+<label>Product description
+  <textarea
+    id="product-description"
+    rows="4"
+    maxlength="1000"
+    placeholder="Describe the product, material, size and condition">
+  </textarea>
+</label>
 <div class="price-preview" id="price-preview">Customer price: R0.00 <small>(includes 20% markup)</small></div>
 <button class="primary" type="submit">Add listing</button>
 <p class="fine">Demo only: listings are saved in this browser. Seller verification and real payments are not connected yet.</p>
