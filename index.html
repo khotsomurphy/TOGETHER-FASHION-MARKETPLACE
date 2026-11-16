@@ -102,8 +102,34 @@
 <div class="page-title"><p class="eyebrow">YOUR BAG</p><h1>Shopping cart</h1></div>
 <div id="cart-items" class="panel"></div>
 </section>
+<div class="seller-auth-switch">
+  <button type="button" id="show-register-form">
+    Create account
+  </button>
+  <button type="button" id="show-login-form">
+    Seller login
+  </button>
+</div>
 
-<section id="seller-auth" style="display:none; padding:20px;">
+<form id="seller-login-form" style="display:none;">
+  <input
+    id="seller-login-email"
+    type="email"
+    placeholder="Email address"
+    required
+  >
+
+  <input
+    id="seller-login-password"
+    type="password"
+    placeholder="Password"
+    required
+  >
+
+  <button type="submit">Sign In</button>
+</form>
+
+  <section id="seller-auth" style="display:none; padding:20px;">
   <h2>Become a Together Seller</h2>
   <p>Create your seller account to list products.</p>
 
