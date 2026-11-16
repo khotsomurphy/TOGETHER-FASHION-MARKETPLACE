@@ -163,3 +163,65 @@ document.querySelector("#product-form").addEventListener("submit",e=>{
 });
 document.querySelector("#year").textContent=new Date().getFullYear();renderProducts();save();
 if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+// Together Marketplace Seller Registration
+document.querySelector("#seller-register-form")
+  ?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const message = document.querySelector("#seller-auth-message");
+    const client = window.togetherSupabase;
+
+    if (!client) {
+      message.textContent = "Supabase connection unavailable.";
+      return;
+    }
+
+    const fullName =
+      document.querySelector("#seller-full-name").value.trim();
+
+    const storeName =
+      document.querySelector("#seller-store-name").value.trim();
+
+    const email =
+      document.querySelector("#seller-email").value.trim();
+
+    const password =
+      document.querySelector("#seller-password").value;
+
+    message.textContent = "Creating your seller account...";
+
+    try {
+      const { data, error } = await client.auth.signUp({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      if (!data.user) {
+        throw new Error("Account creation was not confirmed.");
+      }
+
+      if (!data.session) {
+        message.textContent =
+          "Check your email to verify your account, then sign in.";
+        return;
+      }
+
+      const { error: profileError } = await client
+        .from("sellers_profiles")
+        .insert({
+          id: data.user.id,
+          full_name: fullName,
+          store_name: storeName
+        });
+
+      if (profileError) throw profileError;
+
+      message.textContent =
+        "Seller account created successfully!";
+
+    } catch (error) {
+      message.textContent = error.message;
+    }
+  });
