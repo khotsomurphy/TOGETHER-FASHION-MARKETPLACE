@@ -222,7 +222,13 @@ document.querySelector("#seller-register-form")
     try {
       const { data, error } = await client.auth.signUp({
         email,
-        password
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            store_name: storeName
+          }
+        }
       });
 
       if (error) throw error;
@@ -233,24 +239,17 @@ document.querySelector("#seller-register-form")
 
       if (!data.session) {
         message.textContent =
-          "Check your email to verify your account, then sign in.";
+          "Account created! Please check your email to verify your address.";
         return;
       }
 
-      const { error: profileError } = await client
-        .from("sellers_profiles")
-        .insert({
-          id: data.user.id,
-          full_name: fullName,
-          store_name: storeName
-        });
-
-      if (profileError) throw profileError;
-
       message.textContent =
         "Seller account created successfully!";
+
+      e.target.reset();
 
     } catch (error) {
       message.textContent = error.message;
     }
   });
+
