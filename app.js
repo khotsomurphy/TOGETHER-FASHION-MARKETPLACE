@@ -39,7 +39,36 @@ function renderProducts(list=products){
     `).join("");
 }
 function save(){localStorage.setItem("together-cart",JSON.stringify(cart));document.querySelector("#cart-count").textContent=cart.reduce((n,x)=>n+x.qty,0)}
-function show(view){document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));document.querySelector(`#${view}-view`).classList.remove("hidden");if(view==="cart")renderCart();window.scrollTo({top:0,behavior:"smooth"})}
+
+function show(view) {
+  document.querySelectorAll(".view").forEach(x =>
+    x.classList.add("hidden")
+  );
+
+  if (view === "seller-auth") {
+    document.querySelectorAll(".view").forEach(x =>
+      x.classList.add("hidden")
+    );
+
+    const authSection = document.querySelector("#seller-auth");
+
+    if (authSection) {
+      authSection.style.display = "block";
+      authSection.classList.remove("hidden");
+    }
+
+  } else {
+    const target = document.querySelector(`#${view}-view`);
+
+    if (target) {
+      target.classList.remove("hidden");
+    }
+  }
+
+  if (view === "cart") renderCart();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 function openCategory(category){
   const shop=document.querySelector("#shop-view");
