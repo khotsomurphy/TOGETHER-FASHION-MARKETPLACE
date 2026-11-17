@@ -335,7 +335,12 @@ document.querySelector("#seller-login-form")
       if (profileError) throw profileError;
 
       message.textContent =
-        "Welcome back, " + profile.full_name + "!";
+  "Welcome back, " + profile.full_name + "!";
+
+document.querySelector("#seller-login-form").style.display = "none";
+document.querySelector("#seller-auth").style.display = "none";
+
+show("seller");
 
     } catch (error) {
       message.textContent = error.message;
