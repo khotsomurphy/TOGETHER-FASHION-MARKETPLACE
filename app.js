@@ -181,15 +181,59 @@ document.querySelector("#search").addEventListener("input",e=>renderProducts(pro
 document.querySelector("#shop-now").onclick=()=>document.querySelector("#products").scrollIntoView({behavior:"smooth"});
 function preview(){let n=Number(document.querySelector("#product-price").value)||0;document.querySelector("#price-preview").innerHTML=`Customer price: ${money(n*1.2)} <small>Seller price ${money(n)} + Together markup ${money(n*.2)}</small>`}
 document.querySelector("#product-price").addEventListener("input",preview);
-document.querySelector("#product-form").addEventListener("submit",e=>{
- e.preventDefault();
- let p={id:Date.now(),name:document.querySelector("#product-name").value,category:document.querySelector("#product-category").value,seller:"Demo seller",original:Number(document.querySelector("#product-price").value),image:document.querySelector("#product-image").value.trim(),emoji:"👚"};
- if(p.original<=0)return;
- products.push(p);
- let custom=products.filter(x=>x.id>1000000000000);
- localStorage.setItem("together-products",JSON.stringify(custom));
- renderProducts();e.target.reset();preview();alert("Demo listing added. It is visible in this browser only.");
+document.querySelector("#product-form").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const client = window.togetherSupabase;
+
+  if (!client) {
+    alert("Supabase connection unavailable.");
+    return;
+  }
+
+  const name = document.querySelector("#product-name").value.trim();
+  const category = document.querySelector("#product-category").value;
+  const originalPrice = Number(document.querySelector("#product-price").value);
+  const imageUrl = document.querySelector("#product-image").value.trim();
+  const description =
+    document.querySelector("#product-description")?.value.trim() || "";
+
+  if (!name || !category || !Number.isFinite(originalPrice) || originalPrice <= 0) {
+    alert("Please complete all required product details.");
+    return;
+  }
+
+  const { data: { user }, error: userError } =
+    await client.auth.getUser();
+
+  if (userError || !user) {
+    alert("Please sign in before adding a product.");
+    return;
+  }
+
+  try {
+    const { error } = await client.from("products").insert({
+      seller_id: user.id,
+      name: name,
+      category: category,
+      original_price: originalPrice,
+      image_url: imageUrl || null,
+      description: description || null
+    });
+
+    if (error) throw error;
+
+    e.target.reset();
+    preview();
+
+    alert("Product submitted successfully! Awaiting admin approval.");
+
+  } catch (error) {
+    console.error(error);
+    alert("Product submission failed: " + error.message);
+  }
 });
+
 document.querySelector("#year").textContent=new Date().getFullYear();renderProducts();save();
 if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 // Together Marketplace Seller Registration
