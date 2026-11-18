@@ -493,3 +493,44 @@ document.addEventListener("click", async function(e) {
     button.disabled = false;
   }
 });
+
+async function loadApprovedProducts() {
+  const client = window.togetherSupabase;
+
+  if (!client) {
+    console.error("Supabase is unavailable.");
+    return;
+  }
+
+  try {
+    const { data, error } = await client
+      .from("products")
+      .select("*")
+      .eq("status", "active");
+
+    if (error) throw error;
+
+    const approved = (data || []).map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      seller: "Together seller",
+      original: Number(p.original_price),
+      image: p.image_url || "",
+      description: p.description || ""
+    }));
+
+    products = [
+      ...products.filter(p => !p.databaseProduct),
+      ...approved.map(p => ({
+        ...p,
+        databaseProduct: true
+      }))
+    ];
+
+    renderProducts();
+
+  } catch (error) {
+    console.error("Could not load approved products:", error);
+  }
+}
