@@ -422,6 +422,60 @@ async function loadPendingProducts() {
     }
 
     container.innerHTML = products.map(product => `
+      // ADMIN PRODUCT APPROVAL ACTIONS
+
+document.addEventListener("click", async function(e) {
+  const approveButton = e.target.closest("[data-approve-product]");
+  const rejectButton = e.target.closest("[data-reject-product]");
+
+  if (!approveButton && !rejectButton) return;
+
+  const button = approveButton || rejectButton;
+  const productId = button.dataset.approveProduct ||
+                    button.dataset.rejectProduct;
+
+  const newStatus = approveButton ? "active" : "rejected";
+
+  if (!confirm(
+    `Are you sure you want to ${newStatus} this product?`
+  )) return;
+
+  const client = window.togetherSupabase;
+
+  try {
+    button.disabled = true;
+
+    const { data: { user }, error: userError } =
+      await client.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("Please sign in again.");
+    }
+
+    const { data: admin, error: adminError } = await client
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (adminError) throw adminError;
+    if (!admin) throw new Error("Administrator access required.");
+
+    const { error } = await client
+      .from("products")
+      .update({ status: newStatus })
+      .eq("id", productId)
+      .eq("status", "pending");
+
+    if (error) throw error;
+
+    await loadPendingProducts();
+
+  } catch (error) {
+    alert(error.message);
+    button.disabled = false;
+  }
+});
       <div class="panel">
         <h3>${escapeHtml(product.name)}</h3>
         <p>Category: ${escapeHtml(product.category)}</p>
