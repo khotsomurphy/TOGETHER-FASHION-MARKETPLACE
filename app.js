@@ -422,7 +422,26 @@ async function loadPendingProducts() {
     }
 
     container.innerHTML = products.map(product => `
-      // ADMIN PRODUCT APPROVAL ACTIONS
+      <div class="panel">
+        <h3>${escapeHtml(product.name)}</h3>
+        <p>Category: ${escapeHtml(product.category)}</p>
+        <p>Seller price: R${Number(product.original_price).toFixed(2)}</p>
+        <p>Status: Pending approval</p>
+        <button class="primary" data-approve-product="${product.id}">
+          Approve
+        </button>
+        <button data-reject-product="${product.id}">
+          Reject
+        </button>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    message.textContent = error.message;
+    container.textContent = "";
+  }
+}
+// ADMIN PRODUCT APPROVAL ACTIONS
 
 document.addEventListener("click", async function(e) {
   const approveButton = e.target.closest("[data-approve-product]");
@@ -436,9 +455,7 @@ document.addEventListener("click", async function(e) {
 
   const newStatus = approveButton ? "active" : "rejected";
 
-  if (!confirm(
-    `Are you sure you want to ${newStatus} this product?`
-  )) return;
+  if (!confirm(`Are you sure you want to ${newStatus} this product?`)) return;
 
   const client = window.togetherSupabase;
 
@@ -476,23 +493,3 @@ document.addEventListener("click", async function(e) {
     button.disabled = false;
   }
 });
-      <div class="panel">
-        <h3>${escapeHtml(product.name)}</h3>
-        <p>Category: ${escapeHtml(product.category)}</p>
-        <p>Seller price: R${Number(product.original_price).toFixed(2)}</p>
-        <p>Status: Pending approval</p>
-        <button class="primary" data-approve-product="${product.id}">
-          Approve
-        </button>
-        <button data-reject-product="${product.id}">
-          Reject
-        </button>
-      </div>
-    `).join("");
-
-  } catch (error) {
-    message.textContent = error.message;
-    container.textContent = "";
-  }
-}
-
