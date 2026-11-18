@@ -340,7 +340,23 @@ document.querySelector("#seller-login-form")
 document.querySelector("#seller-login-form").style.display = "none";
 document.querySelector("#seller-auth").style.display = "none";
 
-show("seller");
+
+const { data: adminRole, error: adminRoleError } =
+  await client
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", data.user.id)
+    .maybeSingle();
+
+if (adminRoleError) throw adminRoleError;
+
+if (adminRole) {
+  show("admin");
+  await loadPendingProducts();
+} else {
+  show("seller");
+}
+
 
     } catch (error) {
       message.textContent = error.message;
