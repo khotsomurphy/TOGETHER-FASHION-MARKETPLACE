@@ -167,7 +167,8 @@ if(backToShop){
   show("shop");
 }
 
- let a=e.target.closest("[data-add]");if(a){let p=products.find(x=>x.id===Number(a.dataset.add));let item=cart.find(x=>x.id===p.id);item?item.qty++:cart.push({...p,qty:1});save();a.textContent="Added ✓";setTimeout(()=>a.textContent="Add to cart",900)}
+ let a=e.target.closest("[data-add]");if(a){let p=products.find(x=>String(x.id)===String(a.dataset.add));
+if(!p) return;let item=cart.find(x=>x.id===p.id);item?item.qty++:cart.push({...p,qty:1});save();a.textContent="Added ✓";setTimeout(()=>a.textContent="Add to cart",900)}
  let c=e.target.closest("[data-category]");
 if(c){
   openCategory(c.dataset.category);
