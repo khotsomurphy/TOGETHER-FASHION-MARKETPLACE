@@ -182,6 +182,42 @@ document.querySelector("#search").addEventListener("input",e=>renderProducts(pro
 document.querySelector("#shop-now").onclick=()=>document.querySelector("#products").scrollIntoView({behavior:"smooth"});
 function preview(){let n=Number(document.querySelector("#product-price").value)||0;document.querySelector("#price-preview").innerHTML=`Customer price: ${money(n*1.2)} <small>Seller price ${money(n)} + Together markup ${money(n*.2)}</small>`}
 document.querySelector("#product-price").addEventListener("input",preview);
+
+const imageInput = document.querySelector("#product-image-file");
+const imagePreview = document.querySelector("#product-image-preview");
+const imageMessage = document.querySelector("#image-upload-message");
+
+let selectedProductImage = null;
+
+imageInput?.addEventListener("change", function () {
+  const file = this.files[0];
+
+  selectedProductImage = null;
+
+  if (!file) {
+    imagePreview.style.display = "none";
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    imageMessage.textContent = "Please select an image.";
+    this.value = "";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    imageMessage.textContent = "Image must be smaller than 5 MB.";
+    this.value = "";
+    return;
+  }
+
+  selectedProductImage = file;
+
+  imagePreview.src = URL.createObjectURL(file);
+  imagePreview.style.display = "block";
+  imageMessage.textContent = "Photo selected successfully.";
+});
+
 document.querySelector("#product-form").addEventListener("submit", async e => {
   e.preventDefault();
 
