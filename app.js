@@ -231,7 +231,39 @@ document.querySelector("#product-form").addEventListener("submit", async e => {
   const name = document.querySelector("#product-name").value.trim();
   const category = document.querySelector("#product-category").value;
   const originalPrice = Number(document.querySelector("#product-price").value);
-  const imageUrl = document.querySelector("#product-image").value.trim();
+  let imageUrl = "";
+
+if (selectedProductImage) {
+  const client = window.togetherSupabase;
+  const { data: { user }, error: userError } =
+    await client.auth.getUser();
+
+  if (userError || !user) {
+    alert("Please sign in before uploading a photo.");
+    return;
+  }
+
+  const extension = selectedProductImage.name.split(".").pop();
+  const filePath =
+    `${user.id}/${crypto.randomUUID()}.${extension}`;
+
+  const { data, error } = await client.storage
+    .from("product-images")
+    .upload(filePath, selectedProductImage, {
+      upsert: false
+    });
+
+  if (error) {
+    alert("Photo upload failed: " + error.message);
+    return;
+  }
+
+  const { data: publicData } = client.storage
+    .from("product-images")
+    .getPublicUrl(data.path);
+
+  imageUrl = publicData.publicUrl;
+}
   const description =
     document.querySelector("#product-description")?.value.trim() || "";
 
