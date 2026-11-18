@@ -361,3 +361,68 @@ document.querySelector("#show-register-form")
     document.querySelector("#seller-register-form").style.display = "block";
   });
 
+// TOGETHER ADMIN DASHBOARD
+
+async function loadPendingProducts() {
+  const client = window.togetherSupabase;
+  const container = document.querySelector("#pending-products");
+  const message = document.querySelector("#admin-message");
+
+  if (!client || !container) return;
+
+  container.textContent = "Loading pending products...";
+
+  try {
+    const { data: { user }, error: userError } =
+      await client.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("Please sign in as an administrator.");
+    }
+
+    const { data: admin, error: adminError } = await client
+      .from("admin_users")
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (adminError) throw adminError;
+
+    if (!admin) {
+      throw new Error("Administrator access required.");
+    }
+
+    const { data: products, error } = await client
+      .from("products")
+      .select("*")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!products || products.length === 0) {
+      container.textContent = "No pending products.";
+      return;
+    }
+
+    container.innerHTML = products.map(product => `
+      <div class="panel">
+        <h3>${escapeHtml(product.name)}</h3>
+        <p>Category: ${escapeHtml(product.category)}</p>
+        <p>Seller price: R${Number(product.original_price).toFixed(2)}</p>
+        <p>Status: Pending approval</p>
+        <button class="primary" data-approve-product="${product.id}">
+          Approve
+        </button>
+        <button data-reject-product="${product.id}">
+          Reject
+        </button>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    message.textContent = error.message;
+    container.textContent = "";
+  }
+}
+
