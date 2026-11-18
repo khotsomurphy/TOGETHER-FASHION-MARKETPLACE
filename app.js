@@ -235,6 +235,7 @@ document.querySelector("#product-form").addEventListener("submit", async e => {
 });
 
 document.querySelector("#year").textContent=new Date().getFullYear();renderProducts();save();
+loadApprovedProducts();
 if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 // Together Marketplace Seller Registration
 document.querySelector("#seller-register-form")
