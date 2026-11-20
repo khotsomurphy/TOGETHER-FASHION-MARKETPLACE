@@ -66,7 +66,7 @@
 <label>Product name<input id="product-name" required placeholder="e.g. Classic denim jacket"></label>
 <label>Category<select id="product-category"><option>Women</option><option>Men</option><option>Kids</option><option>Shoes</option><option>Accessories</option></select></label>
 <label>Your original price (R)<input id="product-price" type="number" min="1" step=".01" required placeholder="250.00"></label>
-<label>Upload product photograph</label>
+<label for="product-image-file">Upload product photograph</label>
 
 <input
   id="product-image-file"
@@ -80,7 +80,8 @@
   alt="Product photo preview"
 >
 
-<p id="image-upload-message" class="fine"></p><input id="product-image" type="url" placeholder="Paste a publicly accessible image URL"><small class="fine">Use a publicly accessible image URL.</small></label>
+<p id="image-upload-message" class="fine"></p>
+
 <label>Product description
   <textarea
     id="product-description"
